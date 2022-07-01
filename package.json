@@ -1,0 +1,17 @@
+{
+  "name": "weipl_checkout",
+  "version": "1.0.0",
+  "description": "This is Worldline ePayments India Checkout plugin using cordova",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "worldline",
+    "india",
+    "checkout",
+    "payment"
+  ],
+  "author": "Praveen Yadav",
+  "license": "ISC"
+}
