@@ -3,17 +3,18 @@
     xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <name>WEIPL_checkout</name>
+    <asset src="www/WEIPL_checkout.js" target="js/WEIPL_checkout.js"/>
     <js-module name="WEIPL_checkout" src="www/WEIPL_checkout.js">
         <clobbers target="cordova.plugins.WEIPL_checkout" />
     </js-module>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="WEIPL_checkout">
-                <param name="android-package" value="com.weipl.cordova_checkout" />
+                <param name="android-package" value="com.weipl.cordova_checkout.WEIPL_checkout" />
             </feature>
         </config-file>
         <config-file parent="/*" target="AndroidManifest.xml" />
-        <source-file src="src/android/WEIPL_checkout.java" target-dir="src/com/weipl/cordova_checkout/WEIPL_checkout" />
+        <source-file src="src/android/WEIPL_checkout.java" target-dir="src/com/weipl/cordova_checkout" />
     </platform>
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
