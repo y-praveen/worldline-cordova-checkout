@@ -12,7 +12,7 @@ var WLCheckout = module.exports = {
     init: function (options, successCallback, errorCallback) {
         if (successCallback) {
             WLCheckout.callbacks['payment.success'] = function (response) {
-                successCallback(response.razorpay_payment_id);
+                successCallback(response);
             }
         }
 
@@ -32,7 +32,7 @@ var WLCheckout = module.exports = {
     },
 
     pluginCallback: function (response) {
-        if ('razorpay_payment_id' in response) {
+        /* if ('razorpay_payment_id' in response) {
             WLCheckout.callbacks['payment.success'](response);
         }
         else if ('external_wallet_name' in response) {
@@ -40,7 +40,7 @@ var WLCheckout = module.exports = {
         }
         else if ('code' in response) {
             WLCheckout.callbacks['payment.cancel'](response);
-        }
+        } */
     },
 
     callbacks: {},
