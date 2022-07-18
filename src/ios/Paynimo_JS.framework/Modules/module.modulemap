@@ -1,0 +1,11 @@
+framework module Paynimo_JS {
+  umbrella header "Paynimo_JS.h"
+
+  export *
+  module * { export * }
+}
+
+module Paynimo_JS.Swift {
+    header "Paynimo_JS-Swift.h"
+    requires objc
+}

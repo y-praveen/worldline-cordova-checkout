@@ -1,27 +1,54 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <plugin id="com.weipl.cordova_checkout" version="1.0.0"
     xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <name>WEIPL_checkout</name>
+
     <asset src="www/WEIPL_checkout.js" target="js/WEIPL_checkout.js"/>
+
+    <engines>
+        <engine name="cordova" version=">=3.4.0"/>
+    </engines>
+
+    <asset src="www/WEIPL_checkout.js" target="js/WEIPL_checkout.js"/>
+
     <js-module name="WEIPL_checkout" src="www/WEIPL_checkout.js">
         <clobbers target="cordova.plugins.WEIPL_checkout" />
     </js-module>
+
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="WEIPL_checkout">
                 <param name="android-package" value="com.weipl.cordova_checkout.WEIPL_checkout" />
             </feature>
         </config-file>
+
         <config-file parent="/*" target="AndroidManifest.xml" />
         <source-file src="src/android/WEIPL_checkout.java" target-dir="src/com/weipl/cordova_checkout" />
+
+        <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
+        <!-- <lib-file src="src/android/weipl_checkout.aar" target="libs/weipl_checkout.aar" /> -->
+        <lib-file src="src/android/weipl_checkout.aar" />
     </platform>
+
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
             <feature name="WEIPL_checkout">
                 <param name="ios-package" value="WEIPL_checkout" />
             </feature>
         </config-file>
+        <!-- <dependency id="cordova-plugin-cocoapod-support"/>
+        <header-file src="src/ios/Main.h"/> -->
         <source-file src="src/ios/WEIPL_checkout.m" />
+
+        <source-file src="src/ios/Paynimo_JS.framework" framework="true" />
+        <framework src="weipl_checkout.framework" />
+        <framework src="SystemConfiguration.framework" />
+        <framework src="CFNetwork.framework" />
+
+        <!-- <pods-config ios-min-version="10.0" use-frameworks="true"/>
+        <pod name="razorpay-pod"/>
+        <framework src="CoreTelephony.framework" /> -->
     </platform>
 </plugin>

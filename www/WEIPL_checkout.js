@@ -1,16 +1,13 @@
-// var exec = require('cordova/exec');
-
-exports.coolMethod = function (arg0, success, error) {
-    exec(success, error, 'WEIPL_checkout', 'coolMethod', [arg0]);
-};
-
-module.exports.init = function (arg0, success, error) {
+/* module.exports.init = function (arg0, success, error) {
     exec(success, error, 'WEIPL_checkout', 'init', [arg0]);
-};
+}; */
 
 var WLCheckout = module.exports = {
     init: function (options, successCallback, errorCallback) {
-        if (successCallback) {
+        this.callbacks.success = successCallback;
+        this.callbacks.error = errorCallback;
+
+        /* if (successCallback) {
             WLCheckout.callbacks['payment.success'] = function (response) {
                 successCallback(response);
             }
@@ -18,11 +15,11 @@ var WLCheckout = module.exports = {
 
         if (errorCallback) {
             WLCheckout.callbacks['payment.cancel'] = errorCallback;
-        }
+        } */
 
         cordova.exec(
-            WLCheckout.pluginCallback,
-            WLCheckout.pluginCallback,
+            WLCheckout.successCallback,
+            WLCheckout.errorCallback,
             'WEIPL_checkout',
             'init',
             [
@@ -31,8 +28,18 @@ var WLCheckout = module.exports = {
         );
     },
 
-    pluginCallback: function (response) {
-        /* if ('razorpay_payment_id' in response) {
+    callbacks: {},
+
+    successCallback: function (response) {
+        this.callbacks.success(response);
+    },
+
+    errorCallback: function (response) {
+        this.callbacks.error(response);
+    },
+
+    /* pluginCallback: function (response) {
+        if ('razorpay_payment_id' in response) {
             WLCheckout.callbacks['payment.success'](response);
         }
         else if ('external_wallet_name' in response) {
@@ -40,10 +47,8 @@ var WLCheckout = module.exports = {
         }
         else if ('code' in response) {
             WLCheckout.callbacks['payment.cancel'](response);
-        } */
+        }
     },
-
-    callbacks: {},
 
     on: function (event, callback) {
         if (typeof event === 'string' && typeof callback === 'function') {
@@ -55,5 +60,5 @@ var WLCheckout = module.exports = {
         if (event.pendingResult && event.pendingResult.pluginServiceName === 'Checkout') {
             WLCheckout.pluginCallback(event.pendingResult.result);
         }
-    }
+    } */
 }

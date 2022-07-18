@@ -1,51 +1,57 @@
 package com.weipl.cordova_checkout;
 
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
+import com.weipl.checkout.CheckoutActivity;
+import com.weipl.checkout.utils.CheckoutConstants;
 
-import org.json.JSONArray;
+import org.apache.cordova.*;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONArray;
 
-/**
- * This class echoes a string called from JavaScript.
- */
-public class WEIPL_checkout extends CordovaPlugin {
+public class WEIPL_checkout extends CordovaPlugin implements CheckoutActivity.PaymentResponseListener {
+
+    public CallbackContext callback;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("coolMethod")) {
-            String message = args.getString(0);
-            this.coolMethod(message, callbackContext);
-            return true;
-        }
-
+        this.callback = callbackContext;
         if (action.equals("init")) {
-            this.init(args, callbackContext);
+            this.init(args);
             return true;
         }
         return false;
     }
 
-    private void coolMethod(String message, CallbackContext callbackContext) {
-        if (message != null && message.length() > 0) {
-            callbackContext.success(message);
-        } else {
-            callbackContext.error("Expected one non-empty string argument.");
-        }
-    }
+    // TODO:
+    // Response handling not working in android
+    // Get UPI intent apps method handling
+    // Response handling with callback methods
 
-    private void init(JSONArray args, CallbackContext callbackContext) {
+    private void init(JSONArray args) {
         if (args == null) {
-            callbackContext.error("Expected checkout initialisation options");
+            this.callback.error("Expected checkout initialisation options");
         } else {
             try {
-                // TODO: invoke native Android SDK checkout
-                callbackContext.success("Native SDK will be initialised");                
+                CheckoutActivity.Test act = CheckoutActivity.Test;
+                act.setPaymentResponseListener(this);
+
+                JSONObject convertedObject = new JSONObject(args.getString(0));
+                act.init(this.cordova.getActivity(), convertedObject);
+
+                this.callback.success("Native SDK will be initialised");
             } catch (Exception e) {
-                callbackContext.error("Spmething went wrong " + e);
+                this.callback.error("Something went wrong " + e);
             }
         }
     }
 
+    @Override
+    public void onPaymentError(JSONObject jsonObject) {
+        this.callback.error(jsonObject);
+    }
+
+    @Override
+    public void onPaymentSuccess(JSONObject jsonObject) {
+        this.callback.success(jsonObject);
+    }
 }
