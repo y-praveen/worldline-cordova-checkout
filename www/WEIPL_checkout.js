@@ -1,21 +1,30 @@
-/* module.exports.init = function (arg0, success, error) {
-    exec(success, error, 'WEIPL_checkout', 'init', [arg0]);
-}; */
-
 var WLCheckout = module.exports = {
+    // Plugin method to get list of UPI intalled applications
+    upiIntentAppsList: function (options, successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            'WEIPL_checkout',
+            'upiIntentAppsList',
+            []
+        );
+    },
+
+    // Plugin method to preLoad checkout components
+    preloadComponent: function (options, successCallback, errorCallback) {
+        cordova.exec(
+            successCallback,
+            errorCallback,
+            'WEIPL_checkout',
+            'preloadComponent',
+            []
+        );
+    },
+
+    // Plugin method to invoke SDK from front-end
     init: function (options, successCallback, errorCallback) {
         this.callbacks.success = successCallback;
         this.callbacks.error = errorCallback;
-
-        /* if (successCallback) {
-            WLCheckout.callbacks['payment.success'] = function (response) {
-                successCallback(response);
-            }
-        }
-
-        if (errorCallback) {
-            WLCheckout.callbacks['payment.cancel'] = errorCallback;
-        } */
 
         cordova.exec(
             WLCheckout.successCallback,
@@ -28,37 +37,18 @@ var WLCheckout = module.exports = {
         );
     },
 
+    // Plugin callback object for caller callbacks
     callbacks: {},
 
+    // Plugin succes callback function
     successCallback: function (response) {
-        this.callbacks.success(response);
+        WLCheckout.callbacks.success(response);
     },
 
+    // Plugin error callback function
     errorCallback: function (response) {
-        this.callbacks.error(response);
-    },
+        WLCheckout.callbacks.error(response);
+    }
+};
 
-    /* pluginCallback: function (response) {
-        if ('razorpay_payment_id' in response) {
-            WLCheckout.callbacks['payment.success'](response);
-        }
-        else if ('external_wallet_name' in response) {
-            WLCheckout.callbacks['payment.external_wallet'](response);
-        }
-        else if ('code' in response) {
-            WLCheckout.callbacks['payment.cancel'](response);
-        }
-    },
-
-    on: function (event, callback) {
-        if (typeof event === 'string' && typeof callback === 'function') {
-            WLCheckout.callbacks[event] = callback;
-        }
-    },
-
-    onResume: function (event) {
-        if (event.pendingResult && event.pendingResult.pluginServiceName === 'Checkout') {
-            WLCheckout.pluginCallback(event.pendingResult.result);
-        }
-    } */
-}
+// WLCheckout.preloadComponent();

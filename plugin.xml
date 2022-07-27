@@ -21,14 +21,15 @@
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="WEIPL_checkout">
                 <param name="android-package" value="com.weipl.cordova_checkout.WEIPL_checkout" />
+                <param name="onload" value="true" />
             </feature>
+            <preference name="android-targetSdkVersion" value="31" />
         </config-file>
 
         <config-file parent="/*" target="AndroidManifest.xml" />
         <source-file src="src/android/WEIPL_checkout.java" target-dir="src/com/weipl/cordova_checkout" />
 
         <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
-        <!-- <lib-file src="src/android/weipl_checkout.aar" target="libs/weipl_checkout.aar" /> -->
         <lib-file src="src/android/weipl_checkout.aar" />
     </platform>
 
@@ -37,18 +38,17 @@
             <feature name="WEIPL_checkout">
                 <param name="ios-package" value="WEIPL_checkout" />
             </feature>
+            <preference name="deployment-target" value="12.0" />
         </config-file>
-        <!-- <dependency id="cordova-plugin-cocoapod-support"/>
-        <header-file src="src/ios/Main.h"/> -->
-        <source-file src="src/ios/WEIPL_checkout.m" />
 
-        <source-file src="src/ios/Paynimo_JS.framework" framework="true" />
-        <framework src="weipl_checkout.framework" />
+        <source-file src="src/ios/WEIPL_checkout-Bridging-Header.h" />
+        <source-file src="src/ios/WEIPL_checkout.swift" />
+
+        <source-file src="src/ios/Paynimo_JS.framework" target-dir="lib" framework="true" />
+        <framework src="src/ios/Paynimo_JS.framework" embed="true" custom="true" />
+        <!-- TODO: Need to check feasibility for above lines in ios because one of linked SDK showing as highlighter in x-code -->
+
         <framework src="SystemConfiguration.framework" />
         <framework src="CFNetwork.framework" />
-
-        <!-- <pods-config ios-min-version="10.0" use-frameworks="true"/>
-        <pod name="razorpay-pod"/>
-        <framework src="CoreTelephony.framework" /> -->
     </platform>
 </plugin>

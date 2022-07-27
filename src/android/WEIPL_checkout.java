@@ -1,7 +1,7 @@
 package com.weipl.cordova_checkout;
 
 import com.weipl.checkout.CheckoutActivity;
-import com.weipl.checkout.utils.CheckoutConstants;
+import com.weipl.checkout.upi_intent.UPIIntentResponse;
 
 import org.apache.cordova.*;
 import org.json.JSONException;
@@ -13,35 +13,79 @@ public class WEIPL_checkout extends CordovaPlugin implements CheckoutActivity.Pa
     public CallbackContext callback;
 
     @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        // Preload checkout dependencies on app launch
+        CheckoutActivity.preloadData(cordova.getActivity().getApplicationContext());
+    }
+
+    @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+
         this.callback = callbackContext;
-        if (action.equals("init")) {
+
+        if (action.equals("upiIntentAppsList")) {
+
+            this.upiIntentAppsList();
+            return true;
+
+        } /*
+           * else if (action.equals("preloadComponent")) {
+           * 
+           * cordova.getActivity().runOnUiThread(new Runnable() {
+           * public void run() {
+           * preloadComponent();
+           * callbackContext.success();
+           * }
+           * });
+           * return true;
+           * 
+           * }
+           */ else if (action.equals("init")) {
+
             this.init(args);
             return true;
+
         }
         return false;
     }
 
     // TODO:
-    // Response handling not working in android
     // Get UPI intent apps method handling
-    // Response handling with callback methods
+    // Request & response part for Android & iOS should be in JSON object
+
+    private void upiIntentAppsList() {
+        /*
+         * UPIIntentResponse intentResponse =
+         * CheckoutActivity.getUPIResponse(this.cordova.getActivity());
+         * if(intentResponse == null) {
+         * this.callback.error(jsonObject);
+         * return;
+         * }
+         * 
+         * this.callback.success(intentResponse);
+         */
+    }
+
+    /*
+     * private void preloadComponent() {
+     * CheckoutActivity.preloadData(cordova.getActivity().getApplicationContext());
+     * }
+     */
 
     private void init(JSONArray args) {
         if (args == null) {
             this.callback.error("Expected checkout initialisation options");
-        } else {
-            try {
-                CheckoutActivity.Test act = CheckoutActivity.Test;
-                act.setPaymentResponseListener(this);
+            return;
+        }
 
-                JSONObject convertedObject = new JSONObject(args.getString(0));
-                act.init(this.cordova.getActivity(), convertedObject);
+        try {
+            CheckoutActivity.setPaymentResponseListener(this);
 
-                this.callback.success("Native SDK will be initialised");
-            } catch (Exception e) {
-                this.callback.error("Something went wrong " + e);
-            }
+            JSONObject convertedObject = new JSONObject(args.getString(0));
+            CheckoutActivity.init(this.cordova.getActivity(), convertedObject);
+        } catch (Exception e) {
+            this.callback.error("Something went wrong " + e);
         }
     }
 
@@ -51,7 +95,7 @@ public class WEIPL_checkout extends CordovaPlugin implements CheckoutActivity.Pa
     }
 
     @Override
-    public void onPaymentSuccess(JSONObject jsonObject) {
+    public void onPaymentResponse(JSONObject jsonObject) {
         this.callback.success(jsonObject);
     }
 }
